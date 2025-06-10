@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>題目生成器</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+        }
+        .input-section {
+            margin-bottom: 20px;
+        }
+        .output {
+            white-space: pre-wrap;
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .input-group {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="input-section">
+        <h2>題目生成器</h2>
+        <div class="input-group">
+            <label>Note 內容：</label>
+            <input type="text" id="noteContent" value="S1MCQSet1">
+        </div>
+        <div class="input-group">
+            <label>GUID 前綴：</label>
+            <input type="text" id="guidPrefix" value="JSMathS1MCQ">
+        </div>
+        <div class="input-group">
+            <label>起始編號：</label>
+            <input type="number" id="startNumber" min="1" value="1">
+        </div>
+        <div class="input-group">
+            <label>需要幾多條題目：</label>
+            <input type="number" id="questionCount" min="1" max="100" value="9">
+        </div>
+        <div class="input-group">
+            <label>正確答案次序（例如：AABCDACBD）：</label>
+            <input type="text" id="answers" value="AABCDACBD">
+        </div>
+        <button onclick="generateQuestions()">生成題目</button>
+    </div>
+    <div id="output" class="output"></div>
+
+    <script>
+        function generateQuestions() {
+            const count = parseInt(document.getElementById('questionCount').value);
+            const answers = document.getElementById('answers').value.toUpperCase();
+            const noteContent = document.getElementById('noteContent').value;
+            const guidPrefix = document.getElementById('guidPrefix').value;
+            const startNumber = parseInt(document.getElementById('startNumber').value);
+
+            // 驗證輸入
+            if (answers.length < count) {
+                alert('正確答案的數量不足！');
+                return;
+            }
+            if (!/^[ABCD]+$/.test(answers)) {
+                alert('正確答案只能包含 A、B、C、D！');
+                return;
+            }
+
+            let output = '';
+            
+            for (let i = 0; i < count; i++) {
+                const correctAnswer = answers[i];
+                const template = getTemplateForAnswer(correctAnswer, startNumber + i, noteContent, guidPrefix);
+                output += template + '\n';
+            }
+
+            document.getElementById('output').textContent = output;
+        }
+
+        function getTemplateForAnswer(answer, questionNumber, noteContent, guidPrefix) {
+            const templates = {
+                'A': `{"Note":"${noteContent}","GUID":"${guidPrefix}${questionNumber}","E":0,"Q_T":4,"Q":"MCQ","T":0,"I":1,"A":0,"C_A":"A","A2":"B","A2_Why":"","A3":"C","A3_Why":"","A4":"D","A4_Why":"","A5":"","A5_Why":"","S":"",     "R_T":"None","R_I":0,"R_A":0,"P_T":"None","P_I":0,"P_A":0,"O_L":0}`,
+                'B': `{"Note":"${noteContent}","GUID":"${guidPrefix}${questionNumber}","E":0,"Q_T":4,"Q":"MCQ","T":0,"I":1,"A":0,"C_A":"B","A2":"A","A2_Why":"","A3":"C","A3_Why":"","A4":"D","A4_Why":"","A5":"","A5_Why":"","S":"",     "R_T":"None","R_I":0,"R_A":0,"P_T":"None","P_I":0,"P_A":0,"O_L":0}`,
+                'C': `{"Note":"${noteContent}","GUID":"${guidPrefix}${questionNumber}","E":0,"Q_T":4,"Q":"MCQ","T":0,"I":1,"A":0,"C_A":"C","A2":"A","A2_Why":"","A3":"B","A3_Why":"","A4":"D","A4_Why":"","A5":"","A5_Why":"","S":"",     "R_T":"None","R_I":0,"R_A":0,"P_T":"None","P_I":0,"P_A":0,"O_L":0}`,
+                'D': `{"Note":"${noteContent}","GUID":"${guidPrefix}${questionNumber}","E":0,"Q_T":4,"Q":"MCQ","T":0,"I":1,"A":0,"C_A":"D","A2":"A","A2_Why":"","A3":"B","A3_Why":"","A4":"C","A4_Why":"","A5":"","A5_Why":"","S":"",     "R_T":"None","R_I":0,"R_A":0,"P_T":"None","P_I":0,"P_A":0,"O_L":0}`
+            };
+            return templates[answer];
+        }
+    </script>
+</body>
+</html>

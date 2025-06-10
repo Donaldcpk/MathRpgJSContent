@@ -1,0 +1,337 @@
+<!doctype html>
+<SCRIPT LANGUAGE="JavaScript">
+
+
+</script>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+
+  <title>Question Builder 1.0</title>
+  <meta name="description" content="Question Builder for Starbird Games">
+  <meta name="author" content="Starbird Games">
+
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+
+<!-- jQuery library -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+
+<!-- Latest compiled JavaScript -->
+<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+
+</head>
+
+<script>
+ProcessQuestion = function(form){
+ var questionText = form.Question.value || '';
+    console.log('QUESTION: ' + questionText);
+ var timeLimit = form.TimeLimit.value || 0;
+ if (timeLimit == ''){
+ var timeLimit = 0}
+ var timeLimit = timeLimit * 60;  // converts to frames per second as used by rpg maker engine
+ var correctAnswer = form.Answer.value;	
+    console.log('ANSWER: ' + correctAnswer);
+ 
+ var randomNumber0 = Math.floor(Math.random() * 1000) + 1;
+ var randomNumber1 = Math.floor(Math.random() * 1000) + 1001;
+ var A2_Why = form.A2_Why.value ||'';
+ if (correctAnswer == 0){
+ var correctAnswer = correctAnswer + randomNumber0}
+ else{correctAnswer = correctAnswer + randomNumber1}
+ 
+ var Image = form.Image.value;	
+    console.log('HAS IMAGE: ' + Image);
+ var Audio = form.Audio.value;	
+    console.log('HAS AUDIO: ' + Audio);
+  var Standard = form.Standards.value || '';	
+    console.log('HAS STANDARD: ' + Standard);	
+ var guid = 'MZQ-'+(S4() + '-' + S4() + "-" + S4()).toLowerCase();
+    var Encode = form.Encode.value || 0;
+ if (Encode == 1){
+ var questionText = btoa(questionText);
+ var questionText = rotHex(questionText);
+ var correctAnswer = btoa(correctAnswer);
+ var correctAnswer = rotHex(correctAnswer);
+ var A2_Why = btoa(A2_Why);
+ var A2_Why = rotHex(A2_Why);
+ }
+ else{};
+  
+
+   var rewardType = form.RewardType.value || 'None';
+  console.log(rewardType);
+  var rewardId = form.RewardId.value || 0; 
+  console.log(rewardId);
+  var rewardAmount = form.RewardAmount.value || 0; 
+  console.log(rewardAmount);
+  var penaltyType = form.PenaltyType.value || 'None';
+  var penaltyId = form.PenaltyId.value || 0; 
+  var penaltyAmount = form.PenaltyAmount.value || 0; 
+  var onlyLeader = form.OnlyLeader.value || 0;
+  var databaseString = '{"Note":"Add note here","GUID":"' + guid + '","E":' + Encode + ',"Q_T":2,' + '"Q":"' + questionText + '","T":' + timeLimit + ',"I":' + Image + ',"A":' + Audio + ',"C_A":"' + correctAnswer + '","S":"' + Standard + '","R_T":"'+ rewardType + '","R_I":'+ rewardId + ',"R_A":'+ rewardAmount + ',"P_T":"'+ penaltyType + '","P_I":'+ penaltyId + ',"P_A":'+ penaltyAmount + ',"O_L":' + onlyLeader + ',"A2_Why":"' + A2_Why + '"},'         
+  
+  document.write(databaseString);  
+
+
+}
+
+
+function S4() {
+    return (((1+Math.random())*0x10000)|0).toString(16).substring(1); 
+}
+
+ function rotHex(questionText) {
+  var input     = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890+/=';
+  var output    = '䷏䷙䷒䷲䷋䷎䷅䷌䷠䷺䷵䷘䷆䷥䷛䷡䷑䷔䷪䷃䷊䷖䷝䷓䷁䷱䷄䷴䷀䷇䷳䷗䷩䷟䷮䷈䷹䷜䷯䷍䷿䷶䷸䷢䷚䷂䷕䷣䷭䷨䷦䷧䷉䷾䷷䷤䷰䷐䷽䷼䷻䷫䷞䷬=';
+  var index     = x => input.indexOf(x);
+  var translate = x => index(x) > -1 ? output[index(x)] : x;
+  return questionText.split('').map(translate).join('');
+}
+
+</script>
+
+<style>
+
+
+</style>
+
+<body>
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-sm-3" style="background-color:lavender;"><h2>QUESTION BUILDER</h2></div>
+    <div class="col-sm-9" style="background-color:lavenderblush;"><h2>Design True or False Question</h2></div>
+  </div>
+</div>
+<br>   
+<br> 
+
+<form class="form-horizontal" name="TrueFalse" method="GET">
+<fieldset>
+
+<div class="form-group">
+  <label class="col-md-4 control-label" for="Question">Question</label>
+  <div class="col-md-4">                     
+    <textarea class="form-control" id="Question" name="Question" maxlength="450" class="form-control input-md" required=""></textarea>
+  </div>
+</div>
+
+<div class="form-group">
+  <label class="col-md-4 control-label" for="TimeLimit">Time Limit (in seconds)</label>
+  <div class="col-md-2">                     
+    <textarea class="form-control" id="TimeLimit" name="TimeLimit" maxlength="6" class="form-control input-md" required=""></textarea>
+  </div>
+</div>
+
+<!-- Multiple Radios -->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="Encode">Encode Question and Answer</label>
+  <div class="col-md-4">
+  <div class="radio">
+    <label for="Encode-0">
+      <input type="radio" name="Encode" id="Encode-0" value="0" checked="checked">
+      DO NOT Encode
+    </label>
+	</div>
+  <div class="radio">
+    <label for="Encode-1">
+      <input type="radio" name="Encode" id="Encode-1" value="1">
+      Encode
+    </label>
+	</div>
+  </div>
+</div>
+
+<!-- Multiple Radios -->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="Image">Image</label>
+  <div class="col-md-4">
+  <div class="radio">
+    <label for="Image-0">
+      <input type="radio" name="Image" id="Image-0" value="0" checked="checked">
+      No image
+    </label>
+	</div>
+  <div class="radio">
+    <label for="Image-1">
+      <input type="radio" name="Image" id="Image-1" value="1">
+      Has image
+    </label>
+	</div>
+  </div>
+</div>
+
+<!-- Multiple Radios -->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="Audio">Audio</label>
+  <div class="col-md-4">
+  <div class="radio">
+    <label for="Audio-0">
+      <input type="radio" name="Audio" id="Audio-0" value="0" checked="checked">
+      No audio
+    </label>
+	</div>
+  <div class="radio">
+    <label for="Audio-1">
+      <input type="radio" name="Audio" id="Audio-1" value="1">
+      Has audio
+    </label>
+	</div>
+  </div>
+</div>
+
+<!-- Multiple Radios -->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="Answer">Answer</label>
+  <div class="col-md-4">
+  <div class="radio">
+    <label for="Answer-0">
+      <input type="radio" name="Answer" id="Answer-0" value="0" checked="checked">
+      True
+    </label>
+	</div>
+  <div class="radio">
+    <label for="Answer-1">
+      <input type="radio" name="Answer" id="Answer-1" value="1">
+      False
+    </label>
+	</div>
+  </div>
+</div>
+
+<!-- Text input-->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="A2_Why">Why Wrong Answer Is Wrong</label>  
+  <div class="col-md-5">
+  <input id="A2_Why" name="A2_Why" type="text" placeholder="Optional" >
+    
+  </div>
+</div>
+
+<!-- Text input-->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="Standards">Standards</label>  
+  <div class="col-md-2">
+  <input id="Standards" name="Standards" type="text" placeholder="" class="form-control input-md">
+  </div>
+</div>
+
+<!-- Multiple Radios -->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="OnlyLeader">Scope of Penalty/Reward Effect</label>
+  <div class="col-md-4">
+  <div class="radio">
+    <label for="OnlyLeader-0">
+      <input type="radio" name="OnlyLeader" id="OnlyLeader-0" value="0" checked="checked">
+      Entire Party
+    </label>
+	</div>
+  <div class="radio">
+    <label for="OnlyLeader-1">
+      <input type="radio" name="OnlyLeader" id="OnlyLeader-1" value="1">
+      ONLY Party Leader
+    </label>
+	</div>
+  </div>
+</div>
+
+<!-- Select Basic -->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="RewardType">Reward Type</label>
+  <div class="col-md-1">
+    <select id="RewardType" name="RewardType" class="form-control">
+      <option value="None">None</option>
+	  <option value="Gold">Gold</option>
+      <option value="HP">HP</option>
+      <option value="MP">MP</option>
+      <option value="XP">XP</option>
+      <option value="TP">TP</option>
+      <option value="Item">Item</option>
+      <option value="Weapon">Weapon</option>
+      <option value="Armor">Armor</option>
+      <option value="Skill">Learn Skill</option>
+      <option value="MHP">+ Max HP</option>
+      <option value="MMP">+ Max MP</option>
+      <option value="ATK">+ ATK</option>
+      <option value="DEF">+ DEF</option>
+	  <option value="AddState">Add State</option>
+      <option value="RemoveState">Remove State</option>
+	  <option value="Enemy">Enemy Troop</option>
+    </select>
+  </div>
+</div>
+
+<div class="form-group">
+  <label class="col-md-4 control-label" for="RewardId">Reward ID</label>
+  <div class="col-md-1">
+<input name="RewardId" />
+  </div>
+</div>
+<div class="form-group">
+  <label class="col-md-4 control-label" for="RewardAmount">Reward Amount</label>
+  <div class="col-md-1">
+<input name="RewardAmount"/>
+  </div>
+</div>
+
+<!-- Select Basic -->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="PenaltyType">Penalty Type</label>
+  <div class="col-md-1">
+    <select id="PenaltyType" name="PenaltyType" class="form-control">
+      <option value="None">None</option>
+	  <option value="Gold">Gold</option>
+      <option value="HP">HP</option>
+      <option value="MP">MP</option>
+      <option value="XP">XP</option>
+      <option value="TP">TP</option>
+      <option value="Item">Item</option>
+      <option value="Weapon">Weapon</option>
+      <option value="Armor">Armor</option>
+      <option value="Skill">Learn Skill</option>
+      <option value="MHP">+ Max HP</option>
+      <option value="MMP">+ Max MP</option>
+      <option value="ATK">+ ATK</option>
+      <option value="DEF">+ DEF</option>
+	  <option value="AddState">Add State</option>
+      <option value="RemoveState">Remove State</option>
+	  <option value="Enemy">Enemy Troop</option>
+    </select>
+  </div>
+</div>
+
+<div class="form-group">
+  <label class="col-md-4 control-label" for="PenaltyId">Penalty ID</label>
+  <div class="col-md-1">
+<input name="PenaltyId" />
+  </div>
+</div>
+<div class="form-group">
+  <label class="col-md-4 control-label" for="PenaltyAmount">Penalty Amount</label>
+  <div class="col-md-1">
+<input name="PenaltyAmount"/>
+ </div>
+</div>
+
+
+<!-- Button -->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="SubmitMC">Looks good?</label>
+  <div class="col-md-4">
+    <button id="SubmitMC" name="SubmitMC" class="btn btn-primary" onClick="ProcessQuestion(this.form)"><b>CREATE</b></button>
+  </div>
+</div>
+<br>
+<br>
+<div class="form-group">
+  <label class="col-md-4 control-label" for="BackButton"></label>
+  <div class="col-md-4">
+    <a id="BackButton" name="BackButton" class="btn btn-warning" href="QuestionBuilder.html" role="button"><b>BACK</b></a>
+  </div>
+</div>
+
+</fieldset>
+</form>
+
+</body>

@@ -3,7 +3,7 @@
     "main": "index.html",
     "chromium-args": "--force-color-profile=srgb",
     "window": {
-        "title": "MATH RPG V1.2",
+        "title": "MATH RPG V1.5",
         "width": 816,
         "height": 624,
         "position": "center",
